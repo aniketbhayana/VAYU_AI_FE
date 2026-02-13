@@ -12,7 +12,7 @@ from utils.constants import EVENT_TYPES
 from utils.formatters import format_timestamp
 
 # Page config
-st.set_page_config(page_title="Blockchain Logs - VAYU AI", page_icon="🔗", layout="wide")
+st.set_page_config(page_title="Blockchain Logs - VAYU AI", layout="wide")
 
 # Custom CSS for black theme and hiding sidebar
 st.markdown("""
@@ -22,6 +22,20 @@ st.markdown("""
     footer {visibility: hidden;}
     [data-testid="stSidebar"] { display: none; }
     h1, h2, h3 { color: #FFFFFF !important; }
+    
+    /* Gradient styling for all buttons on this page */
+    div[data-testid="stButton"] button {
+        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    div[data-testid="stButton"] button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -30,7 +44,7 @@ from utils.navigation import render_top_nav
 render_top_nav()
 
 # Header
-st.title("🔗 Blockchain Transaction Logs")
+st.title("Blockchain Transaction Logs")
 st.markdown("<p style='color: #AAAAAA;'>View immutable records of critical system events</p>", unsafe_allow_html=True)
 
 # Filter Controls Row (instead of sidebar)
@@ -47,7 +61,7 @@ with col2:
 
 with col3:
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🔄 Refresh Logs", use_container_width=True):
+    if st.button("Refresh Logs", use_container_width=True):
         st.rerun()
 
 st.markdown("---")
@@ -64,7 +78,7 @@ try:
         if event_filter:
             logs = [log for log in logs if log.get("event_type") in event_filter]
         
-        st.success(f"✅ Loaded {len(logs)} blockchain logs")
+        st.success(f"Loaded {len(logs)} blockchain logs")
         
         # Display summary metrics
         col1, col2, col3, col4 = st.columns(4)
@@ -76,42 +90,33 @@ try:
         with col1:
             st.metric("Total Logs", len(logs))
         with col2:
-            st.metric("🎯 Decisions", decision_count)
+            st.metric("Decisions", decision_count)
         with col3:
-            st.metric("⚠️ Faults", fault_count)
+            st.metric("Faults", fault_count)
         with col4:
-            st.metric("🔧 Healing", healing_count)
+            st.metric("Healing", healing_count)
         
         st.markdown("---")
         
         # Display logs as expandable cards
-        st.subheader("📋 Transaction Log Entries")
+        st.subheader("Transaction Log Entries")
         
         for idx, log in enumerate(logs):
             event_type = log.get("event_type", "unknown")
-            event_icon = EVENT_TYPES.get(event_type, "📝")
             timestamp = format_timestamp(log.get("timestamp", ""))
             device_id = log.get("device_id", "N/A")
             tx_hash = log.get("hash", "N/A")
             data = log.get("data", {})
             
-            # Color based on event type
-            color_map = {
-                "decision": "#00D9FF",
-                "fault": "#FFB300",
-                "healing": "#00C853"
-            }
-            color = color_map.get(event_type, "#888")
-            
-            with st.expander(f"{event_icon} **{event_type.upper()}** - {timestamp} - Device: {device_id}", expanded=(idx < 3)):
+            with st.expander(f"{event_type.upper()} - {timestamp} - Device: {device_id}", expanded=(idx < 3)):
                 col1, col2 = st.columns([1, 2])
                 
                 with col1:
                     st.markdown(f"""
-                    **Event Type:** {event_icon} {event_type}  
+                    **Event Type:** {event_type}  
                     **Timestamp:** {timestamp}  
                     **Device ID:** `{device_id}`  
-                    **TX Hash:** `{tx_hash[:16]}...` {('✅' if tx_hash != 'N/A' else '⚠️')}
+                    **TX Hash:** `{tx_hash[:16]}...`
                     """)
                 
                 with col2:
@@ -140,12 +145,12 @@ try:
 
 except Exception as e:
     error_alert(f"Failed to load blockchain logs: {str(e)}")
-    st.info("💡 Make sure the backend is running and the blockchain logger is active")
+    st.info("Make sure the backend is running and the blockchain logger is active")
 
 # Footer
 st.markdown("---")
 st.markdown("""
-    <div style="text-align: center; color: #666; font-size: 12px; padding: 20px;">
-        🔒 Blockchain logs are immutable and cryptographically verified
+    <div style="text-align: center; color: #666; font-size: 14px; padding: 20px;">
+        Blockchain logs are immutable and cryptographically verified
     </div>
 """, unsafe_allow_html=True)

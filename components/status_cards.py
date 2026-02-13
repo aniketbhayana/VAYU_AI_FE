@@ -5,14 +5,14 @@ import streamlit as st
 from typing import Optional
 
 
-def status_card(title: str, content: str, icon: str = "ℹ️", color: str = "#00D9FF", expandable: bool = False):
+def status_card(title: str, content: str, icon: str = "", color: str = "#00D9FF", expandable: bool = False):
     """
     Display a status card with title and content
     
     Args:
         title: Card title
         content: Card content
-        icon: Icon emoji
+        icon: Icon text (no emoji)
         color: Border color
         expandable: Whether content should be in an expander
     """
@@ -25,7 +25,7 @@ def status_card(title: str, content: str, icon: str = "ℹ️", color: str = "#0
             margin: 12px 0;
         ">
             <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                <span style="font-size: 24px; margin-right: 12px;">{icon}</span>
+                {f'<span style="font-size: 18px; margin-right: 12px; color: {color};">{icon}</span>' if icon else ''}
                 <span style="color: {color}; font-size: 18px; font-weight: 600;">{title}</span>
             </div>
     """, unsafe_allow_html=True)
@@ -53,16 +53,16 @@ def prediction_card(will_peak: bool, confidence: float, reasoning: str, estimate
         risk = RISK_LOW
     
     color = get_risk_color(risk)
-    emoji = get_confidence_emoji(confidence)
+    status_text = get_confidence_emoji(confidence)
     
     content = f"""
-    <strong>Risk Level:</strong> {emoji} {risk} ({confidence*100:.0f}% confidence)<br/>
+    <strong>Risk Level:</strong> {status_text} {risk} ({confidence*100:.0f}% confidence)<br/>
     <strong>Will Peak:</strong> {'Yes' if will_peak else 'No'}<br/>
     {f'<strong>Estimated Peak:</strong> {estimated_peak:.1f} µg/m³<br/>' if estimated_peak else ''}
     <strong>AI Analysis:</strong> {reasoning}
     """
     
-    status_card("🔥 Smoke Prediction", content, "🔥", color)
+    status_card("Smoke Prediction", content, "", color)
 
 
 def classification_card(air_type: str, confidence: float, reasoning: str):
@@ -71,16 +71,16 @@ def classification_card(air_type: str, confidence: float, reasoning: str):
     from utils.formatters import get_confidence_emoji
     
     air_label = AIR_TYPES.get(air_type, air_type)
-    emoji = get_confidence_emoji(confidence)
+    status_text = get_confidence_emoji(confidence)
     color = COLOR_SUCCESS if air_type == "clean" else COLOR_INFO
     
     content = f"""
     <strong>Type:</strong> {air_label}<br/>
-    <strong>Confidence:</strong> {emoji} {confidence*100:.0f}%<br/>
+    <strong>Confidence:</strong> {status_text} {confidence*100:.0f}%<br/>
     <strong>AI Analysis:</strong> {reasoning}
     """
     
-    status_card("🏭 Air Classification", content, "🏭", color)
+    status_card("Air Classification", content, "", color)
 
 
 def fault_card(has_fault: bool, fault_type: str, severity: str, details: str, affected_sensor: Optional[str] = None):
@@ -88,7 +88,7 @@ def fault_card(has_fault: bool, fault_type: str, severity: str, details: str, af
     from utils.constants import FAULT_TYPES, COLOR_SUCCESS, COLOR_WARNING, COLOR_DANGER
     
     if not has_fault:
-        status_card("⚠️ Fault Detection", "✅ <strong>All Systems Healthy</strong>", "✅", COLOR_SUCCESS)
+        status_card("Fault Detection", "<strong>All Systems Healthy</strong>", "", COLOR_SUCCESS)
         return
     
     # Determine color based on severity
@@ -102,14 +102,14 @@ def fault_card(has_fault: bool, fault_type: str, severity: str, details: str, af
     fault_label = FAULT_TYPES.get(fault_type, fault_type)
     
     content = f"""
-    <strong>Status:</strong> ❌ Fault Detected<br/>
+    <strong>Status:</strong> Fault Detected<br/>
     <strong>Type:</strong> {fault_label}<br/>
     <strong>Severity:</strong> {severity.upper()}<br/>
     {f'<strong>Affected Sensor:</strong> {affected_sensor.upper()}<br/>' if affected_sensor else ''}
     <strong>Details:</strong> {details}
     """
     
-    status_card("⚠️ Fault Detection", content, "⚠️", color)
+    status_card("Fault Detection", content, "", color)
 
 
 def control_card(fan_on: bool, fan_intensity: int, is_override: bool = False):
@@ -117,12 +117,12 @@ def control_card(fan_on: bool, fan_intensity: int, is_override: bool = False):
     from utils.constants import COLOR_SUCCESS, COLOR_INFO
     
     color = COLOR_SUCCESS if fan_on else COLOR_INFO
-    status_icon = "🟢" if fan_on else "⚫"
+    status_text = "ON" if fan_on else "OFF"
     
     content = f"""
-    <strong>Status:</strong> {status_icon} {'ON' if fan_on else 'OFF'}<br/>
+    <strong>Status:</strong> [{status_text}] {'ON' if fan_on else 'OFF'}<br/>
     <strong>Speed:</strong> {fan_intensity}%<br/>
-    <strong>Mode:</strong> {'🔧 Manual Override' if is_override else '🤖 Automatic'}
+    <strong>Mode:</strong> {'Manual Override' if is_override else 'Automatic'}
     """
     
-    status_card("💨 Fan Control", content, "💨", color)
+    status_card("Fan Control", content, "", color)

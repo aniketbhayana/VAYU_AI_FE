@@ -57,13 +57,13 @@ def get_risk_color(risk_level: str) -> str:
 
 
 def get_confidence_emoji(confidence: float) -> str:
-    """Get emoji based on confidence level"""
+    """Get status text based on confidence level"""
     if confidence >= 0.8:
-        return "🟢"
+        return "[High]"
     elif confidence >= 0.5:
-        return "🟡"
+        return "[Medium]"
     else:
-        return "🔴"
+        return "[Low]"
 
 
 def truncate_text(text: str, max_length: int = 100) -> str:

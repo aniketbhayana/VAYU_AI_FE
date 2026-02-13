@@ -31,26 +31,26 @@ RISK_HIGH = "HIGH"
 
 # Air types
 AIR_TYPES = {
-    "cigarette": "🚬 Cigarette Smoke",
-    "vehicle": "🚗 Vehicle Exhaust",
-    "cooking": "🍳 Cooking Fumes",
-    "chemical": "⚗️ Chemical Fumes",
-    "clean": "✅ Clean Air",
-    "unknown": "❓ Unknown"
+    "cigarette": "Cigarette Smoke",
+    "vehicle": "Vehicle Exhaust",
+    "cooking": "Cooking Fumes",
+    "chemical": "Chemical Fumes",
+    "clean": "Clean Air",
+    "unknown": "Unknown"
 }
 
 # Fault types
 FAULT_TYPES = {
-    "sensor_stuck": "⚠️ Sensor Stuck",
-    "inconsistent_reading": "⚠️ Inconsistent Reading",
-    "fan_not_working": "❌ Fan Not Working",
-    "out_of_range": "⚠️ Out of Range",
-    "no_fault": "✅ No Fault"
+    "sensor_stuck": "Sensor Stuck",
+    "inconsistent_reading": "Inconsistent Reading",
+    "fan_not_working": "Fan Not Working",
+    "out_of_range": "Out of Range",
+    "no_fault": "No Fault"
 }
 
 # Event types
 EVENT_TYPES = {
-    "decision": "🎯 Control Decision",
-    "fault": "⚠️ Fault Detected",
-    "healing": "🔧 Self-Healing"
+    "decision": "Control Decision",
+    "fault": "Fault Detected",
+    "healing": "Self-Healing"
 }

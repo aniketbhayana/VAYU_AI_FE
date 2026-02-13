@@ -16,8 +16,8 @@ from components.alerts import error_alert, warning_alert, info_alert
 # Load environment
 load_dotenv()
 
-# Page config
-st.set_page_config(page_title="Dashboard - VAYU AI", page_icon="📊", layout="wide")
+# Page config - Page title is rendered by Streamlit based on file name or set_page_config
+st.set_page_config(page_title="Dashboard - VAYU AI", layout="wide")
 
 # Custom CSS for black theme and hiding sidebar
 st.markdown("""
@@ -27,6 +27,20 @@ st.markdown("""
     footer {visibility: hidden;}
     [data-testid="stSidebar"] { display: none; }
     h1, h2, h3 { color: #FFFFFF !important; }
+    
+    /* Gradient styling for all buttons on this page */
+    div[data-testid="stButton"] button {
+        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    div[data-testid="stButton"] button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -35,7 +49,7 @@ from utils.navigation import render_top_nav
 render_top_nav()
 
 # Header
-st.title("📊 Real-Time Dashboard")
+st.title("Real-Time Dashboard")
 st.markdown("<p style='color: #AAAAAA;'>Monitoring air quality, AI predictions, and system health</p>", unsafe_allow_html=True)
 
 # Controls Row (Simplified)
@@ -52,7 +66,7 @@ with col2:
     refresh_interval = 5
 
 with col3:
-    if st.button("🔄 Trigger Manual Refresh", use_container_width=True):
+    if st.button("Trigger Manual Refresh", use_container_width=True):
         st.rerun()
 
 st.markdown("---")
@@ -62,14 +76,12 @@ dashboard_data = {}
 fetch_error = None
 try:
     # This is where the backend linking happens
-    # dashboard_data = api_client.get_aggregated_dashboard_data(selected_device)
-    # For now, we attempt to fetch but handle the failure gracefully
     dashboard_data = api_client.get_aggregated_dashboard_data(selected_device)
 except Exception as e:
     fetch_error = str(e)
 
 # 1. Real-Time Sensor Data Section (Heading is Permanent)
-st.subheader("📡 Real-Time Sensor Data (ESP32)")
+st.subheader("Real-Time Sensor Data (ESP32)")
 sensor_container = st.container()
 with sensor_container:
     current_reading = dashboard_data.get("current_reading")
@@ -89,14 +101,14 @@ st.markdown("---")
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("🌡️ Air Quality Index (AQI)")
+    st.subheader("Air Quality Index (AQI)")
     if current_reading:
         aqi_gauge(current_reading.get("pm25", 0))
     else:
         st.caption("Awaiting data for AQI calculation")
 
 with col2:
-    st.subheader("📈 Historical Sensor Trends")
+    st.subheader("Historical Sensor Trends")
     try:
         history = api_client.get_sensor_history(selected_device, limit=20)
         if history:
@@ -109,7 +121,7 @@ with col2:
 st.markdown("---")
 
 # 3. Gen-AI Agent Predictions Section
-st.subheader("🤖 Gen-AI Agent Predictions")
+st.subheader("Gen-AI Agent Predictions")
 col_ai1, col_ai2 = st.columns(2)
 
 with col_ai1:
@@ -138,7 +150,7 @@ with col_ai2:
 st.markdown("---")
 
 # 4. System Health & Control Section
-st.subheader("🔧 System Health & Control")
+st.subheader("System Health & Control")
 col_ctrl1, col_ctrl2 = st.columns(2)
 
 with col_ctrl1:

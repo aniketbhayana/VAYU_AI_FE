@@ -12,7 +12,6 @@ load_dotenv()
 # Page configuration
 st.set_page_config(
     page_title="VAYU AI - Air Quality Monitor",
-    page_icon="🌬️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -44,20 +43,21 @@ st.markdown("""
         letter-spacing: -0.5px;
     }
     
-    /* Buttons */
-    .stButton>button {
-        background-color: #4CAF50 !important; /* Normal Green */
+    /* Buttons - Gradient (Normal Green to Dark Green) */
+    div[data-testid="stButton"] button {
+        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%) !important;
         color: white !important;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 24px;
-        font-weight: 600;
-        transition: all 0.3s ease;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 12px 24px !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
     }
     
-    .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    div[data-testid="stButton"] button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
     }
     
     /* Beige Navigation Styling */
@@ -95,33 +95,33 @@ st.markdown("""
 col1, col2, col3 = st.columns([1, 1, 1])
 with col2:
     st.markdown("<br>", unsafe_allow_html=True)
-    # Green button, no logo
+    # Gradient button, no emoji/logo
     if st.button("Open Dashboard", use_container_width=True, type="primary"):
-        st.switch_page("pages/1_📊_Dashboard.py")
+        st.switch_page("pages/1_Dashboard.py")
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 
 # Backend status check
 from services.api_client import api_client
 
-st.markdown("<h3 style='text-align: center;'>🔌 System Status</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>System Status</h3>", unsafe_allow_html=True)
 
 col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
 
 with col2:
     try:
         health = api_client.health_check()
-        st.success("✅ Backend Connected")
+        st.success("Backend Connected")
     except Exception as e:
-        st.error("❌ Backend Disconnected")
+        st.error("Backend Disconnected")
 
 with col3:
     try:
         devices = api_client.get_devices()
-        status_text = f"📡 {len(devices)} Device(s) Connected" if devices else "📡 No Devices Found"
+        status_text = f"Device(s) Connected: {len(devices)}" if devices else "No Devices Found"
         st.info(status_text)
     except:
-        st.warning("⚠️ Device check unavailable")
+        st.warning("Device check unavailable")
 
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.markdown("""

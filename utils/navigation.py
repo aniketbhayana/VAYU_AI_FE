@@ -1,5 +1,5 @@
 """
-Top Navigation Utility for VAYU AI
+Top Navigation Utility for VAYU AI Dashboard
 """
 import streamlit as st
 
@@ -48,6 +48,19 @@ def render_top_nav():
         .nav-link:hover {
             background-color: rgba(75, 54, 33, 0.1);
         }
+
+        /* Gradient styling for Streamlit buttons in the nav */
+        div[data-testid="stButton"] button {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%) !important;
+            color: white !important;
+            border: none !important;
+            transition: all 0.3s ease !important;
+        }
+
+        div[data-testid="stButton"] button:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2) !important;
+        }
         </style>
     """, unsafe_allow_html=True)
     
@@ -58,16 +71,16 @@ def render_top_nav():
         st.markdown(f"<h3 style='color: #F5F5DC; margin: 0; padding-left: 10px;'>VAYU AI</h3>", unsafe_allow_html=True)
     
     with col2:
-        if st.button("🏠 Home", use_container_width=True):
+        if st.button("Home", use_container_width=True):
             st.switch_page("app.py")
     
     with col3:
-        if st.button("📊 Dashboard", use_container_width=True):
-            st.switch_page("pages/1_📊_Dashboard.py")
+        if st.button("Dashboard", use_container_width=True):
+            st.switch_page("pages/1_Dashboard.py")
             
     with col4:
-        if st.button("🔗 Blockchain", use_container_width=True):
-            st.switch_page("pages/2_🔗_Blockchain.py")
+        if st.button("Blockchain", use_container_width=True):
+            st.switch_page("pages/2_Blockchain.py")
             
     # Inline style for the beige background behind buttons if needed, 
     # but Streamlit buttons have their own styling. 

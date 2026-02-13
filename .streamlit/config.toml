@@ -1,6 +1,6 @@
 [client]
 # Show or hide the toolbar in the top right corner
-toolbarMode = "hidden"
+toolbarMode = "minimal"
 showErrorDetails = false
 
 [server]

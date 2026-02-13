@@ -71,7 +71,7 @@ def large_metric(label: str, value: str, icon: str = "", color: str = "#00D9FF")
             border-radius: 12px;
             margin: 16px 0;
         ">
-            <div style="font-size: 48px; margin-bottom: 8px;">{icon}</div>
+            {f'<div style="font-size: 48px; margin-bottom: 8px;">{icon}</div>' if icon else ''}
             <div style="color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
                 {label}
             </div>
