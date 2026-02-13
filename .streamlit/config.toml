@@ -1,0 +1,22 @@
+[client]
+# Show or hide the toolbar in the top right corner
+toolbarMode = "hidden"
+showErrorDetails = false
+
+[server]
+# Enable CORS for API requests
+enableCORS = false
+enableXsrfProtection = false
+
+[browser]
+# Disable usage stats collection
+gatherUsageStats = false
+
+[theme]
+# Use black theme
+base = "dark"
+primaryColor = "#4CAF50" # Green as requested
+backgroundColor = "#000000" # Black as requested
+secondaryBackgroundColor = "#111111"
+textColor = "#FFFFFF"
+font = "sans serif"

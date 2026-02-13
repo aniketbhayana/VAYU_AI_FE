@@ -17,7 +17,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for dark theme
+# Custom CSS for black theme and top navigation
 st.markdown("""
     <style>
     /* Import Google Font */
@@ -28,26 +28,26 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
     
-    /* Main container */
-    .main {
-        background-color: #0E1117;
+    /* Main container - Solid Black */
+    .stApp {
+        background-color: #000000 !important;
     }
+    
+    /* Hide default header and footer */
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
     
     /* Headers */
     h1, h2, h3 {
+        color: #FFFFFF !important;
         font-weight: 700;
         letter-spacing: -0.5px;
     }
     
-    /* Sidebar */
-    .css-1d391kg {
-        background-color: #1E1E1E;
-    }
-    
     /* Buttons */
     .stButton>button {
-        background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
-        color: white;
+        background-color: #4CAF50 !important; /* Normal Green */
+        color: white !important;
         border: none;
         border-radius: 8px;
         padding: 12px 24px;
@@ -57,54 +57,35 @@ st.markdown("""
     
     .stButton>button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
     }
     
-    /* Metrics */
-    [data-testid="stMetricValue"] {
-        font-size: 28px;
-        font-weight: 700;
-    }
-    
-    /* Cards */
-    .element-container {
-        transition: all 0.3s ease;
-    }
-    
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-    
-    ::-webkit-scrollbar-track {
-        background: #1E1E1E;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        background: #00D9FF;
+    /* Beige Navigation Styling */
+    .top-nav-bar {
+        background-color: #F5F5DC;
+        padding: 5px;
         border-radius: 4px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-        background: #0099CC;
+        margin-bottom: 25px;
     }
     </style>
 """, unsafe_allow_html=True)
 
+# Render Top Navigation
+from utils.navigation import render_top_nav
+render_top_nav()
+
 # Main landing page
 st.markdown("""
-    <div style="text-align: center; padding: 60px 0 40px 0;">
+    <div style="text-align: center; padding: 100px 0 40px 0;">
         <h1 style="
-            font-size: 64px;
-            background: linear-gradient(135deg, #00D9FF 0%, #00C853 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 80px;
+            color: #FFFFFF !important;
             margin: 0;
+            font-weight: 800;
         ">
-            🌬️ VAYU AI
+            VAYU AI
         </h1>
-        <p style="color: #888; font-size: 20px; margin-top: 16px;">
+        <p style="color: #AAAAAA; font-size: 24px; margin-top: 16px;">
             Gen-AI Powered Air Quality Monitoring System
         </p>
     </div>
@@ -114,7 +95,8 @@ st.markdown("""
 col1, col2, col3 = st.columns([1, 1, 1])
 with col2:
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🚀 Open Dashboard", use_container_width=True, type="primary"):
+    # Green button, no logo
+    if st.button("Open Dashboard", use_container_width=True, type="primary"):
         st.switch_page("pages/1_📊_Dashboard.py")
 
 st.markdown("<br><br>", unsafe_allow_html=True)
@@ -122,33 +104,30 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 # Backend status check
 from services.api_client import api_client
 
-st.markdown("---")
-st.markdown("### 🔌 System Status")
+st.markdown("<h3 style='text-align: center;'>🔌 System Status</h3>", unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
-
-with col1:
-    try:
-        health = api_client.health_check()
-        st.success("✅ Backend Connected")
-        st.caption(f"URL: `{os.getenv('BACKEND_URL', 'http://localhost:8000')}`")
-    except Exception as e:
-        st.error("❌ Backend Disconnected")
-        st.caption(f"URL: `{os.getenv('BACKEND_URL', 'http://localhost:8000')}`")
+col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
 
 with col2:
     try:
-        devices = api_client.get_devices()
-        st.info(f"📡 {len(devices)} Device(s) Connected" if devices else "📡 No Devices Found")
-        if devices:
-            st.caption(f"Devices: {', '.join(devices)}")
-    except:
-        st.warning("⚠️ Unable to fetch devices")
+        health = api_client.health_check()
+        st.success("✅ Backend Connected")
+    except Exception as e:
+        st.error("❌ Backend Disconnected")
 
-st.markdown("---")
+with col3:
+    try:
+        devices = api_client.get_devices()
+        status_text = f"📡 {len(devices)} Device(s) Connected" if devices else "📡 No Devices Found"
+        st.info(status_text)
+    except:
+        st.warning("⚠️ Device check unavailable")
+
+st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.markdown("""
-    <div style="text-align: center; color: #666; font-size: 12px; padding: 20px;">
-        VAYU AI v1.0.0 | Real-time Monitoring • AI Predictions • Blockchain Logging
+    <div style="text-align: center; color: #444; font-size: 14px; padding: 20px;">
+        VAYU AI v1.1.0 | Reliable Environment Intelligence
     </div>
 """, unsafe_allow_html=True)
+
 

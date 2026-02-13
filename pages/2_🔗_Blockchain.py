@@ -14,28 +14,41 @@ from utils.formatters import format_timestamp
 # Page config
 st.set_page_config(page_title="Blockchain Logs - VAYU AI", page_icon="🔗", layout="wide")
 
+# Custom CSS for black theme and hiding sidebar
+st.markdown("""
+    <style>
+    .stApp { background-color: #000000 !important; }
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    [data-testid="stSidebar"] { display: none; }
+    h1, h2, h3 { color: #FFFFFF !important; }
+    </style>
+""", unsafe_allow_html=True)
+
+# Top Navigation
+from utils.navigation import render_top_nav
+render_top_nav()
+
 # Header
 st.title("🔗 Blockchain Transaction Logs")
-st.markdown("View immutable records of critical system events")
+st.markdown("<p style='color: #AAAAAA;'>View immutable records of critical system events</p>", unsafe_allow_html=True)
 
-st.markdown("---")
+# Filter Controls Row (instead of sidebar)
+col1, col2, col3 = st.columns([2, 3, 1])
+with col1:
+    log_limit = st.slider("Number of logs", 10, 100, 20, 10)
 
-# Sidebar controls
-st.sidebar.header("Filter Options")
+with col2:
+    event_filter = st.multiselect(
+        "Filter Event Types",
+        options=["decision", "fault", "healing"],
+        default=["decision", "fault", "healing"]
+    )
 
-# Number of logs to fetch
-log_limit = st.sidebar.slider("Number of logs", 10, 100, 20, 10)
-
-# Event type filter
-event_filter = st.sidebar.multiselect(
-    "Event Types",
-    options=["decision", "fault", "healing"],
-    default=["decision", "fault", "healing"]
-)
-
-# Refresh button
-if st.sidebar.button("🔄 Refresh Logs"):
-    st.rerun()
+with col3:
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("🔄 Refresh Logs", use_container_width=True):
+        st.rerun()
 
 st.markdown("---")
 
