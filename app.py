@@ -92,11 +92,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Main header
+# Main landing page
 st.markdown("""
-    <div style="text-align: center; padding: 20px 0;">
+    <div style="text-align: center; padding: 60px 0 40px 0;">
         <h1 style="
-            font-size: 48px;
+            font-size: 64px;
             background: linear-gradient(135deg, #00D9FF 0%, #00C853 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -104,70 +104,51 @@ st.markdown("""
         ">
             🌬️ VAYU AI
         </h1>
-        <p style="color: #888; font-size: 16px; margin-top: 8px;">
-            Intelligent Air Quality Monitoring System
+        <p style="color: #888; font-size: 20px; margin-top: 16px;">
+            Gen-AI Powered Air Quality Monitoring System
         </p>
     </div>
 """, unsafe_allow_html=True)
 
-st.markdown("---")
+# Center button to dashboard
+col1, col2, col3 = st.columns([1, 1, 1])
+with col2:
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("🚀 Open Dashboard", use_container_width=True, type="primary"):
+        st.switch_page("pages/1_📊_Dashboard.py")
 
-# Welcome message
-st.markdown("""
-### Welcome to VAYU AI Dashboard
+st.markdown("<br><br>", unsafe_allow_html=True)
 
-This is the main landing page. Use the sidebar to navigate to:
-
-- **📊 Dashboard** - Real-time air quality monitoring and control
-- **🔗 Blockchain** - View blockchain transaction logs
-- **⚙️ Settings** - Configure dashboard settings
-
----
-
-### System Overview
-
-**VAYU AI** (AeroLedger) is a Gen-AI powered intelligent air monitoring system featuring:
-
-✅ **Real-time Sensor Monitoring** - PM2.5, CO2, CO, VOC  
-✅ **AI-Powered Predictions** - Smoke event prediction  
-✅ **Air Classification** - Identify pollution sources  
-✅ **Fault Detection** - Automatic sensor health monitoring  
-✅ **Self-Healing** - Intelligent recovery from faults  
-✅ **Blockchain Logging** - Immutable event records  
-✅ **Smart Fan Control** - Automated air quality management  
-
----
-
-### Quick Start
-
-1. Ensure the backend server is running at `http://localhost:8000`
-2. Navigate to **📊 Dashboard** to view real-time data
-3. Select your device from the dropdown
-4. Monitor air quality metrics and AI predictions
-5. Use manual override controls if needed
-
----
-
-### Backend Status
-""")
-
-# Check backend connection
+# Backend status check
 from services.api_client import api_client
-from components.alerts import connection_status
 
-try:
-    health = api_client.health_check()
-    connection_status(True, os.getenv("BACKEND_URL", "http://localhost:8000"))
-    
-    st.json(health)
-    
-except Exception as e:
-    connection_status(False, os.getenv("BACKEND_URL", "http://localhost:8000"))
-    st.error(f"Error: {str(e)}")
+st.markdown("---")
+st.markdown("### 🔌 System Status")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    try:
+        health = api_client.health_check()
+        st.success("✅ Backend Connected")
+        st.caption(f"URL: `{os.getenv('BACKEND_URL', 'http://localhost:8000')}`")
+    except Exception as e:
+        st.error("❌ Backend Disconnected")
+        st.caption(f"URL: `{os.getenv('BACKEND_URL', 'http://localhost:8000')}`")
+
+with col2:
+    try:
+        devices = api_client.get_devices()
+        st.info(f"📡 {len(devices)} Device(s) Connected" if devices else "📡 No Devices Found")
+        if devices:
+            st.caption(f"Devices: {', '.join(devices)}")
+    except:
+        st.warning("⚠️ Unable to fetch devices")
 
 st.markdown("---")
 st.markdown("""
     <div style="text-align: center; color: #666; font-size: 12px; padding: 20px;">
-        VAYU AI Dashboard v1.0.0 | Built with Streamlit | © 2026
+        VAYU AI v1.0.0 | Real-time Monitoring • AI Predictions • Blockchain Logging
     </div>
 """, unsafe_allow_html=True)
+

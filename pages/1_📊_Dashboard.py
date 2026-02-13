@@ -104,8 +104,8 @@ try:
     system_health = dashboard_data.get("system_health", {})
     
     # Display current sensor readings
+    st.subheader("📡 Real-Time Sensor Data (ESP32)")
     if current_reading:
-        st.subheader("📡 Current Sensor Readings")
         sensor_metric_row(
             pm25=current_reading.get("pm25", 0),
             co2=current_reading.get("co2", 0),
@@ -123,12 +123,12 @@ try:
     col1, col2 = st.columns([1, 1])
     
     with col1:
+        st.subheader("🌡️ Air Quality Index (AQI)")
         if current_reading:
-            st.subheader("🌡️ Air Quality Index")
             aqi_gauge(current_reading.get("pm25", 0))
     
     with col2:
-        st.subheader("📈 Sensor History")
+        st.subheader("📈 Historical Sensor Trends")
         try:
             history = api_client.get_sensor_history(selected_device, limit=20)
             if history:
@@ -141,6 +141,8 @@ try:
     st.markdown("---")
     
     # AI Predictions and Classifications
+    st.subheader("🤖 Gen-AI Agent Predictions")
+    
     col1, col2 = st.columns(2)
     
     with col1:
@@ -167,6 +169,8 @@ try:
     st.markdown("---")
     
     # Fault Detection and Control Status
+    st.subheader("🔧 System Health & Control")
+    
     col1, col2 = st.columns(2)
     
     with col1:
